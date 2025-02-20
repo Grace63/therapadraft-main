@@ -1,0 +1,276 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* BODY => a simpler, lighter teal gradient top->bottom */
+  body {
+    font-family: 'Nunito', sans-serif;
+    color: #111;
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* Subtle from #bde2df (top) to #cfeae9 (bottom) => both are light teals */
+    background: linear-gradient(to bottom, #bde2df, #cfeae9);
+    position: relative;
+  }
+  
+  /* HEADER => black title + small subtitle */
+  .notes-header {
+    text-align: center;
+    padding: 3rem 2rem 1rem;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .page-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #000;
+  }
+  
+  /* SHIFT THE ICON DOWN so it aligns with text baseline */
+  .notes-title-icon {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    top: 6px; /* manually shift downward => 6px, adjust if needed */
+  }
+  
+  /* SUBTITLE => same style as "Home, Settings" etc => 'Nunito', 1rem, 400, #111 */
+  .page-subtitle {
+    margin-top: 0.8rem;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #111;
+  }
+  
+  /* FLOATING ORBS => subtle brand teal gradients. Remove if you want zero texture. */
+  .floating-orb {
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: 0 0 40px rgba(0, 128, 128, 0.2),
+                0 0 20px rgba(174, 198, 195, 0.2);
+    animation: floatOrb 10s ease-in-out infinite;
+    z-index: 1;
+  }
+  .orb1 {
+    top: 100px;
+    left: -80px;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(
+      circle at 30% 30%,
+      rgba(0, 128, 128, 0.4),
+      rgba(174, 198, 195, 0.2)
+    );
+  }
+  .orb2 {
+    top: 200px;
+    right: -60px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(
+      circle at 70% 70%,
+      rgba(174, 198, 195, 0.4),
+      rgba(0, 128, 128, 0.2)
+    );
+  }
+  .orb3 {
+    bottom: 120px;
+    left: 40%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(0, 128, 128, 0.3),
+      rgba(174, 198, 195, 0.3),
+      rgba(0, 128, 128, 0.2)
+    );
+  }
+  
+  /* MAIN CONTENT => note cards layout */
+  .notes-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    padding: 2rem 1rem 6rem;
+  }
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+  
+  /* NOTE CARD => date + Observations/Advice in same row => .note-footer */
+  .note-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  .note-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+  }
+  .note-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: #000;
+  }
+  .note-text {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  .note-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .note-date {
+    font-size: 0.85rem;
+    color: #666;
+  }
+  .note-actions {
+    display: flex;
+    gap: 1rem;
+  }
+  .action-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #008080;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+  }
+  .action-link:hover {
+    color: #006666;
+    border-color: #006666;
+  }
+  
+  /* The overlay => dims & blurs background */
+  .overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(3px);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+  .overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* The expanded sheet => center, A4-like size => animated open/close */
+  .expanded-sheet {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    width: 600px;      /* approximate A4 ratio => ~8.3" x 11.7" => 600 x 840 */
+    height: 840px;
+    background: #fff;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 1rem;
+    z-index: 1000;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    opacity: 1;
+  }
+  .expanded-sheet.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+  
+  /* The tab row => Observations / Advice => top center */
+  .sheet-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+  }
+  .tab-link {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: #008080;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s ease, color 0.3s ease;
+  }
+  .tab-link:hover {
+    border-color: #008080;
+  }
+  .active-tab {
+    border-color: #008080;
+  }
+  
+  /* The content area => flipping between Observations & Advice */
+  .sheet-content {
+    width: 100%;
+    height: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+  }
+  .sheet-panel {
+    width: 100%;
+    height: 100%;
+    display: none;  /* show only if active-panel */
+    overflow-y: auto;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    padding: 1rem;
+    color: #333;
+  }
+  .active-panel {
+    display: block;
+    animation: fadeIn 0.4s ease forwards;
+  }
+  
+  /* The close button => top-right corner => now even closer to the top-right */
+  .close-sheet-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  .close-sheet-btn:hover {
+    color: #000;
+  }
+  
+  /* Animations */
+  @keyframes floatOrb {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-30px); }
+    100% { transform: translateY(0px); }
+  }
+  @keyframes fadeIn {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  

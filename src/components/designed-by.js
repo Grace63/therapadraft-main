@@ -1,7 +1,7 @@
 
 import React from "react";
 import "../styles/index.css";
-import markkhan from './assets/markkhan.jpg';
+import markkhan from "./assets/markkhan.jpg";
 
 const psychologists = [
   {

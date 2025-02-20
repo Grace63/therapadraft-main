@@ -1,12 +1,22 @@
 /** @type {import('tailwindcss').Config} */
-export default {
-    content: [
-      "./index.html",
-      "./src/**/*.{js,ts,jsx,tsx}"
-    ],
-    theme: {
-      extend: {},
+module.exports = {
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  theme: {
+    extend: {
+      fontFamily: {
+        nunito: ["Nunito", "sans-serif"],
+        playfair: ["Playfair Display", "serif"],
+      },
+      keyframes: {
+        floatOrb: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-30px)" },
+        },
+      },
+      animation: {
+        floatOrb: "floatOrb 10s ease-in-out infinite",
+      },
     },
-    plugins: [],
-  }
-  
+  },
+  plugins: [],
+};

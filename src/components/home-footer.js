@@ -2,7 +2,7 @@ import React from "react";
 
 const HomeFooter = () => {
   return (
-    <section className="bg-gray-100 bw-full bg-teal-600 text-black text-center py-12 px-6">
+    <section className="bg-gray-100 bw-full  text-black text-center py-12 px-6">
       <h2 className="text-3xl font-bold mb-4">Ready to begin?</h2>
       <p className="text-lg mb-6">
         Let Therapa guide your mental wellness, one step at a time.
